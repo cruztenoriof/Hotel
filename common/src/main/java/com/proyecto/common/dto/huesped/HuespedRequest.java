@@ -11,9 +11,13 @@ public record HuespedRequest(
         @Size(min = 2, max = 50, message = "El nombre debe tener entre 2 y 50 caracteres.")
         String nombre,
 
-        @NotBlank(message = "El apellido es obligatorio.")
+        @NotBlank(message = "El apellido paterno es obligatorio.")
         @Size(min = 2, max = 50, message = "El apellido debe tener entre 2 y 50 caracteres.")
-        String apellido,
+        String apellidoPaterno,
+
+        @NotBlank(message = "El apellido es materno es obligatorio.")
+        @Size(min = 2, max = 50, message = "El apellido debe tener entre 2 y 50 caracteres.")
+        String apellidoMaterno,
 
         @NotBlank(message = "El email es obligatorio.")
         @Email(message = "El correo no tiene un formato válido.")
@@ -25,8 +29,12 @@ public record HuespedRequest(
         String telefono,
 
         @NotBlank(message = "El documento es obligatorio.")
-        @Size(min = 5, max = 30, message = "El documento debe tener entre 5 y 30 caracteres.")
-        String documento,
+        @Size(min = 3, max = 30, message = "El documento debe tener entre 3 y 30 caracteres.")
+        String TipoDocumento,
+
+        @NotBlank(message = "El id del documento es obligatorio.")
+        @Size(min = 3, max = 30, message = "El documento debe tener entre 3 y 30 caracteres.")
+        String IdDocumento,
 
         @NotBlank(message = "La nacionalidad es obligatoria.")
         @Size(max = 50, message = "La nacionalidad no puede superar los 50 caracteres.")

@@ -1,6 +1,6 @@
 package com.proyecto.common.exceptions;
 
-import com.gina.common.dto.CustomErrorResponse;
+import com.proyecto.common.dto.CustomErrorResponse;
 import feign.FeignException;
 import feign.RetryableException;
 import jakarta.validation.ConstraintViolationException;
