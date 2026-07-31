@@ -1,25 +1,25 @@
 package com.proyecto.common.dto.habitacion;
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 
 public record HabitacionRequest(
 
-        @Positive(message = "El número de habitación debe ser mayor que cero.")
+        @NotNull(message = "El número de habitación es requerido")
+        @Positive(message = "El número de habitación debe ser positivo")
         Integer numero,
 
-        @NotBlank(message = "El tipo es obligatorio.")
-        @Size(max = 30)
+        @NotBlank(message = "El tipo de habitación es requerido")
+        @Size(min = 1, max = 30, message = "El tipo de habitación debe tener entre 1 y 30 caracteres")
         String tipo,
 
-        @Positive(message = "El precio debe ser mayor que cero.")
+        @NotNull(message = "El precio es requerido")
+        @DecimalMin(value = "0.01", message = "El precio debe ser mayor a 0")
         BigDecimal precio,
 
-        @Min(value = 1, message = "La capacidad mínima es de una persona.")
+        @NotNull(message = "La capacidad es requerida")
+        @Min(value = 1, message = "La capacidad mínima es de 1 persona")
         Integer capacidad
 ) {
 }

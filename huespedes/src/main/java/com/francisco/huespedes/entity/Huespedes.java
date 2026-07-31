@@ -53,7 +53,7 @@
         private EstadoRegistro estadoRegistro;
 
         public void actualizar(String nombre, String apellidoPaterno, String apellidoMaterno,
-                               String telefono,String tipoDocumento, String idDocumento,
+                               String telefono,Long tipoDocumento, String idDocumento,
                                String nacionalidad, String email) {
             validarNoEliminado();
 
@@ -63,7 +63,7 @@
             this.apellidoPaterno = apellidoPaterno.trim();
             this.apellidoMaterno = apellidoMaterno.trim();
             this.nacionalidad = nacionalidad;
-            this.tipoDocumento = TipoDocumento.valueOf(tipoDocumento.trim().toUpperCase());
+            this.tipoDocumento = TipoDocumento.obtenerTipoDocumentoporCodigo(tipoDocumento);
             this.idDocumento = idDocumento.trim();
             this.email = email.trim().toLowerCase();
             this.telefono = telefono.trim();
@@ -82,8 +82,8 @@
                     "El email es requerido y debe tener entre 1 y 100 caracteres");
             StringCustomUtils.validarTamanio(telefono, 10, 10,
                     "El telefono es requerido y debe tener 10 caracteres");
-            StringCustomUtils.validarTamanio(documento, 1,30,
-                    "El documento es requerido y debe tener entre 1 y 30 caracteres");
+            //StringCustomUtils.validarTamanio(documento, 1,30,
+            //        "El documento es requerido y debe tener entre 1 y 30 caracteres");
             StringCustomUtils.validarTamanio(nacionalidad, 1, 50,
                     "La naacionalidad es requerida y debe tener entre 1 y 50 caracteres");
         }
@@ -93,6 +93,7 @@
                 throw new IllegalArgumentException(
                         "El huesped está elimiado");
         }
+
         public void eliminar() {
             this.estadoRegistro = EstadoRegistro.ELIMINADO;
         }

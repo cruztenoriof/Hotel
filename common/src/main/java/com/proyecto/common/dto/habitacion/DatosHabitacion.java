@@ -1,10 +1,9 @@
 package com.proyecto.common.dto.habitacion;
 
+import java.math.BigDecimal;
+
 public record DatosHabitacion(
-
-        Long id,
         Integer numero,
-        String tipo
-
-) {
-}
+        String tipo,
+        BigDecimal precio
+) {}
