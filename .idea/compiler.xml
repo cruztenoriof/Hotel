@@ -9,18 +9,9 @@
         <outputRelativeToContentRoot value="true" />
         <module name="eureka" />
         <module name="gateway" />
+        <module name="reservas" />
       </profile>
       <profile name="Annotation profile for huespedes" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar" />
-        </processorPath>
-        <module name="huespedes" />
-      </profile>
-      <profile name="Annotation profile for common" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -29,8 +20,12 @@
         </processorPath>
         <module name="common" />
         <module name="authorization" />
+        <module name="huespedes" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="msv-reservas" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
@@ -39,6 +34,8 @@
       <module name="eureka" options="-parameters" />
       <module name="gateway" options="-parameters" />
       <module name="huespedes" options="-parameters" />
+      <module name="msv-reservas" options="-parameters" />
+      <module name="reservas" options="-parameters" />
     </option>
   </component>
 </project>
