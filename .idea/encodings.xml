@@ -5,6 +5,7 @@
     <file url="file://$PROJECT_DIR$/common/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/eureka/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/gateway/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/habitaciones/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/huespedes/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/msv-reservas/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/reservas/src/main/java" charset="UTF-8" />

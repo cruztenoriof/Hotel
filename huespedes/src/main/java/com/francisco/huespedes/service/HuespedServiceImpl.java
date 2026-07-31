@@ -30,15 +30,16 @@ public class HuespedServiceImpl implements HuespedService {
         return huespedRepository.findById(id)
                 .map(huespedMapper::entidadAResponse)
                 .orElseThrow(() -> new IllegalArgumentException("Huesped sin estado no encontrado con id: " + id));
+
+
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<HuespedResponse> listar() {
         log.info("Listando todos los huespedes");
-        return huespedRepository.findAll().stream()
-                .map(huespedMapper::entidadAResponse)
-                .toList();
+        return huespedRepository.findByEstadoRegistro(EstadoRegistro.ACTIVO).stream()
+                .map(huespedMapper::entidadAResponse).toList();
     }
 
     @Override
@@ -56,7 +57,7 @@ public class HuespedServiceImpl implements HuespedService {
     @Override
     public HuespedResponse registrar(HuespedRequest request) {
         log.info("Registrando nuevo huesped {}", request.nombre());
-        obtenerTipoDocumentoValido(request.TipoDocumento());
+        obtenerTipoDocumentoValido(request.tipoDocumento().longValue());
         validarDatosUnicos(request);
 
         Huespedes huespedes = huespedMapper.requestAEntidad(request);
@@ -73,7 +74,7 @@ public class HuespedServiceImpl implements HuespedService {
             throw new IllegalArgumentException("No se puede actualizar el huesped con ID " + id + " porque se " +
                     "encuentra eliminado.");
         }
-        obtenerTipoDocumentoValido(request.TipoDocumento());
+        obtenerTipoDocumentoValido(request.tipoDocumento().longValue());
         //validarReservasActivas(id);
         validarCambiosUnicos(request, id);
         huespedes.actualizar(
@@ -81,8 +82,8 @@ public class HuespedServiceImpl implements HuespedService {
                 request.apellidoPaterno(),
                 request.apellidoMaterno(),
                 request.telefono(),
-                request.TipoDocumento(),
-                request.IdDocumento(),
+                request.tipoDocumento(),
+                request.idDocumento(),
                 request.nacionalidad(),
                 request.email()
         );
@@ -106,17 +107,6 @@ public class HuespedServiceImpl implements HuespedService {
         log.info("Huesped con id {} ha sido eliminado", id);
     }
 
-    /*private void validarReservasActivas(Long HuespedId) {
-        log.info("Consultando al servicio si el huesped con id {} tiene citas " +
-                "CONFIRMADAS o EN_CURSO", HuespedId);
-        boolean tieneCitasActivas = reservasClient.tieneCitasActivas(HuespedId);
-
-        if (tieneCitasActivas) {
-            throw new IllegalArgumentException("No se puede realizar la operación porque el huesped " +
-                    "tiene reservas en estado CONFIRMADA o EN_CURSO.");
-        }
-    }*/
-
     private void validarDatosUnicos(HuespedRequest request) {
         log.info("Validando email único...");
         if (huespedRepository.existsByEmailAndEstadoRegistro(
@@ -131,9 +121,9 @@ public class HuespedServiceImpl implements HuespedService {
         }
         log.info("Validando documento único...");
         if (huespedRepository.existsByIdDocumentoAndEstadoRegistro(
-                request.IdDocumento().trim(), EstadoRegistro.ACTIVO)) {
+                request.idDocumento().trim(), EstadoRegistro.ACTIVO)) {
             throw new IllegalArgumentException("Ya existe un huesped activo registrado con el número de documento: "
-                    + request.IdDocumento());
+                    + request.idDocumento());
         }
     }
 
@@ -145,9 +135,9 @@ public class HuespedServiceImpl implements HuespedService {
                     + request.email());
         }
         if (huespedRepository.existsByIdDocumentoAndEstadoRegistroAndIdHuespedNot(
-                request.IdDocumento().trim(), EstadoRegistro.ACTIVO, id)) {
+                request.idDocumento().trim(), EstadoRegistro.ACTIVO, id)) {
             throw new IllegalArgumentException("Ya existe un huesped activo registrado con el número de documento." +
-                    request.IdDocumento());
+                    request.idDocumento());
         }
 
         if (huespedRepository.existsByTelefonoAndEstadoRegistroAndIdHuespedNot(
@@ -156,17 +146,16 @@ public class HuespedServiceImpl implements HuespedService {
                     request.telefono());
         }
     }
-    private TipoDocumento obtenerTipoDocumentoValido(String tipoDocumento) {
-        if (tipoDocumento == null) {
-            throw new IllegalArgumentException("El tipo de documento es requerido");
-        }
-        String normalizado = tipoDocumento.trim().toUpperCase();
+    private TipoDocumento obtenerTipoDocumentoValido(Long documento) {
+        return TipoDocumento.obtenerTipoDocumentoporCodigo(documento);
+
+        /*String normalizado = tipoDocumento.getDescripcion().trim().toUpperCase();
         if (normalizado.equals("INE") || normalizado.equals("PASAPORTE") || normalizado.equals("LICENCIA_DE_CONDUCIR")) {
             return TipoDocumento.valueOf(normalizado);
         }
         throw new IllegalArgumentException(
                 "El tipo de documento no es válido. Los únicos documentos válidos son: " +
                         "INE, PASAPORTE y LICENCIA DE CONDUCIR"
-        );
+        );*/
     }
 }

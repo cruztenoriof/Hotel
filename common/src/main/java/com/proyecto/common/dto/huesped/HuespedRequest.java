@@ -1,9 +1,6 @@
 package com.proyecto.common.dto.huesped;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 public record HuespedRequest(
 
@@ -28,13 +25,13 @@ public record HuespedRequest(
         @Pattern(regexp = "\\d{10}", message = "El teléfono debe contener exactamente 10 dígitos.")
         String telefono,
 
-        @NotBlank(message = "El documento es obligatorio.")
-        @Size(min = 3, max = 30, message = "El documento debe tener entre 3 y 30 caracteres.")
-        String TipoDocumento,
+        @NotNull(message = "El documento es obligatorio.")
+        //@Size(min = 1, max = 30, message = "El documento debe tener entre 3 y 30 caracteres.")
+        Long tipoDocumento,
 
         @NotBlank(message = "El id del documento es obligatorio.")
         @Size(min = 3, max = 30, message = "El documento debe tener entre 3 y 30 caracteres.")
-        String IdDocumento,
+        String idDocumento,
 
         @NotBlank(message = "La nacionalidad es obligatoria.")
         @Size(max = 50, message = "La nacionalidad no puede superar los 50 caracteres.")

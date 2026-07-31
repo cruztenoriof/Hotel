@@ -64,8 +64,8 @@ public class HabitacionServiceImpl implements HabitacionService {
 
     @Override
     public HabitacionResponse actualizar(HabitacionRequest request, Long id) {
+        log.info("Actualizando habitación con id: {}", id);
         Habitacion habitacion = obtenerHabitacionActivaOException(id);
-        log.info("Actualizando Habitación con id: {}", id);
 
         validarCambiosUnicos(request, habitacion);
 
@@ -82,8 +82,8 @@ public class HabitacionServiceImpl implements HabitacionService {
 
     @Override
     public void eliminar(Long id) {
-        Habitacion habitacion = obtenerHabitacionActivaOException(id);
         log.info("Eliminando Habitación con id: {}", id);
+        Habitacion habitacion = obtenerHabitacionActivaOException(id);
 
         habitacion.eliminar();
         log.info("Habitación con id {} ha sido eliminada", id);
@@ -103,6 +103,7 @@ public class HabitacionServiceImpl implements HabitacionService {
 
     @Override
     public void actualizarEstadoHabitacionSistema(Long id, Long idEstado) {
+        log.info("SI LLEGA AQUI");
         Habitacion habitacion = obtenerHabitacionActivaOException(id);
 
         EstadoHabitacion nuevoEstado = EstadoHabitacion.obtenerEstadoHabitacionPorCodigo(idEstado);

@@ -29,10 +29,6 @@ public class ReservaController extends CommonController<ReservaRequest, ReservaR
 		return ResponseEntity.noContent().build();
 	}
 
-	/**
-	 * Endpoint interno, consumido vía Feign por msv-huespedes para validar la
-	 * restricción "no se puede eliminar un huésped con reservas EN_CURSO".
-	 */
 	@GetMapping("/id-huesped/{idHuesped}/reserva-en-curso")
 	public ResponseEntity<Void> huespedTieneReservaEnCurso(
 			@PathVariable @Positive(message = "El idHuesped debe ser positivo") Long idHuesped) {
