@@ -8,6 +8,8 @@ import java.time.LocalDate;
 
 public record ReservaResponse(
 		Long id,
+		Long idHuesped,
+		Long idHabitacion,
 		DatosHuesped huesped,
 		DatosHabitacion habitacion,
 		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")

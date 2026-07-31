@@ -8,8 +8,8 @@ import lombok.Getter;
 @Getter
 public enum TipoDocumento {
     INE (1L, "INE"),
-    LICENCIA_DE_CONDUCIR (2L, "Licencia de conducir"),
-    PASAPORTE (3L, "Pasaporte");
+    PASAPORTE (2L, "Pasaporte"),
+    LICENCIA_DE_CONDUCIR (3L, "Licencia de conducir");
 
     private final Long codigo;
     private final String descripcion;

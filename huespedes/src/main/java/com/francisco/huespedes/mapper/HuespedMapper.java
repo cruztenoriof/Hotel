@@ -18,8 +18,8 @@ public class HuespedMapper implements CommonMapper <HuespedRequest, HuespedRespo
                 .apellidoPaterno(request.apellidoPaterno().trim())
                 .apellidoMaterno(request.apellidoMaterno().trim())
                 .email(request.email().toLowerCase().trim())
-                .tipoDocumento(TipoDocumento.valueOf(request.TipoDocumento().trim().toUpperCase()))
-                .idDocumento(request.IdDocumento().trim())
+                .tipoDocumento(TipoDocumento.obtenerTipoDocumentoporCodigo(request.tipoDocumento()))
+                .idDocumento(request.idDocumento().trim())
                 .nacionalidad(request.nacionalidad())
                 .telefono(request.telefono().trim())
                 .estadoRegistro(EstadoRegistro.ACTIVO)
@@ -31,13 +31,14 @@ public class HuespedMapper implements CommonMapper <HuespedRequest, HuespedRespo
         if (entidad == null) return null;
         return new HuespedResponse(
                 entidad.getIdHuesped(),
-                String.join(" ",entidad.getNombre(), entidad.getApellidoPaterno(), entidad.getApellidoMaterno()),
+                entidad.getNombre(),
+                entidad.getApellidoPaterno(),
+                entidad.getApellidoMaterno(),
                 entidad.getEmail(),
                 entidad.getTelefono(),
-                entidad.getTipoDocumento().name(),
+                entidad.getTipoDocumento().getDescripcion(),
                 entidad.getIdDocumento(),
-                entidad.getNacionalidad(),
-                entidad.getEstadoRegistro() !=null ? entidad.getEstadoRegistro().name() :null
+                entidad.getNacionalidad()
         );
     }
 }

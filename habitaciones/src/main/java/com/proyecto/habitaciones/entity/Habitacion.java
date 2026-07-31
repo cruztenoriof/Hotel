@@ -5,18 +5,15 @@ import com.proyecto.common.enums.EstadoRegistro;
 import com.proyecto.common.utils.StringCustomUtils;
 import com.proyecto.common.utils.ValoresUnicosUtils;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Getter
 @Table(name = "HABITACIONES")
@@ -48,45 +45,86 @@ public class Habitacion {
     private EstadoRegistro estadoRegistro;
 
     public void actualizar(Integer numero, String tipo, BigDecimal precio, Integer capacidad) {
+        validarActualizacionPermitida();
+        validarDatos(numero, tipo, precio, capacidad);
+
         this.numero = numero;
-        this.tipo = tipo;
+        this.tipo = tipo.trim();
         this.precio = precio;
         this.capacidad = capacidad;
     }
 
     public void eliminar() {
-        this.puedeEliminar();
+        validarEliminacionPermitida();
         this.estadoRegistro = EstadoRegistro.ELIMINADO;
     }
-
-    /**
-     * Cambio de estado MANUAL (disparado por un administrador vía el endpoint
-     * público). No permite volver a DISPONIBLE si la habitación está OCUPADA.
-     */
-    public void actualizarEstadoManual(EstadoHabitacion nuevoEstado) {
-        if (this.estadoHabitacion == EstadoHabitacion.OCUPADA
-                && nuevoEstado == EstadoHabitacion.DISPONIBLE) {
-            throw new IllegalStateException(
-                    "No se puede cambiar manualmente a " + EstadoHabitacion.DISPONIBLE
-                            + " una habitación que está " + EstadoHabitacion.OCUPADA);
-        }
-        this.estadoHabitacion = nuevoEstado;
-    }
-
-    /**
-     * Cambio de estado disparado por el SISTEMA (creación, check-in, check-out
-     * o cancelación de una reserva en el microservicio de reservas). No aplica
-     * la restricción anterior, ya que es una transición automática de negocio.
-     */
     public void actualizarEstadoSistema(EstadoHabitacion nuevoEstado) {
+        validarNoEliminado();
         this.estadoHabitacion = nuevoEstado;
     }
 
-    private void puedeEliminar() {
-        if (this.estadoHabitacion == EstadoHabitacion.OCUPADA) {
-            throw new IllegalStateException(
-                    "Una habitación con estado " + EstadoHabitacion.OCUPADA + " no se puede eliminar");
-        }
+    public static Habitacion crear(Integer numero, String tipo, BigDecimal precio, Integer capacidad){
+        validarDatos(numero, tipo, precio, capacidad);
+        return Habitacion.builder()
+                .numero(numero)
+                .tipo(tipo.trim())
+                .precio(precio)
+                .capacidad(capacidad)
+                .estadoHabitacion(EstadoHabitacion.DISPONIBLE)
+                .estadoRegistro(EstadoRegistro.ACTIVO)
+                .build();
     }
+
+    private static void validarDatos(Integer numero, String tipo, BigDecimal precio, Integer capacidad){
+        ValoresUnicosUtils.validarEnteroPositivo(
+                numero, "El número de habitación es requerido y debe ser positivo");
+        StringCustomUtils.validarTamanio(
+                tipo, 3, 30, "El tipo de habitación es requerido");
+        ValoresUnicosUtils.validarBigDecimalPositivo(
+                precio, "El precio es requerido y debe ser mayor a cero");
+        if(capacidad > 10)
+            throw new IllegalArgumentException("La capacidad máxima es de 10 personas");
+        ValoresUnicosUtils.validarEnteroPositivo(capacidad, "La capacidad es requerida y debe ser positiva");
+    }
+
+    private void validarNoEliminado(){
+        if(this.estadoRegistro == EstadoRegistro.ELIMINADO)
+            throw new IllegalArgumentException("La habitación ya está eliminada");
+    }
+
+    private void validarActualizacionPermitida(){
+        validarNoEliminado();
+        if(this.estadoHabitacion == EstadoHabitacion.OCUPADA)
+            throw new IllegalArgumentException("Una habitación ocupada no puede actualizarse");
+    }
+
+    private void validarEliminacionPermitida(){
+        validarNoEliminado();
+        if(this.estadoHabitacion == EstadoHabitacion.OCUPADA)
+            throw new IllegalArgumentException("La habitación con estado " + this.estadoHabitacion + " no puede eliminarse");
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

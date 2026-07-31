@@ -12,15 +12,15 @@ import org.springframework.stereotype.Component;
 public class HabitacionMapper implements CommonMapper<HabitacionRequest, HabitacionResponse, Habitacion> {
 
     @Override
-    public HabitacionResponse entidadAResponse(Habitacion entity) {
-        if (entity == null) return null;
+    public HabitacionResponse entidadAResponse(Habitacion entidad) {
+        if (entidad == null) return null;
         return new HabitacionResponse(
-                entity.getId(),
-                entity.getNumero(),
-                entity.getTipo(),
-                entity.getPrecio(),
-                entity.getCapacidad(),
-                entity.getEstadoHabitacion().getDescripcion()
+                entidad.getId(),
+                entidad.getNumero(),
+                entidad.getTipo(),
+                entidad.getPrecio(),
+                entidad.getCapacidad(),
+                entidad.getEstadoHabitacion().getDescripcion()
         );
     }
 
@@ -28,14 +28,12 @@ public class HabitacionMapper implements CommonMapper<HabitacionRequest, Habitac
     public Habitacion requestAEntidad(HabitacionRequest request) {
         if (request == null) return null;
 
-        return Habitacion.builder()
-                .numero(request.numero())
-                .tipo(request.tipo())
-                .precio(request.precio())
-                .capacidad(request.capacidad())
-                .estadoHabitacion(EstadoHabitacion.DISPONIBLE)
-                .estadoRegistro(EstadoRegistro.ACTIVO)
-                .build();
+        return Habitacion.crear(
+                request.numero(),
+                request.tipo(),
+                request.precio(),
+                request.capacidad()
+        );
     }
 
 }

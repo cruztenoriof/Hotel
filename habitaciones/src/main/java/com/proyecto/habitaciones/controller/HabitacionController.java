@@ -23,11 +23,7 @@ public class HabitacionController extends CommonController<HabitacionRequest, Ha
         return ResponseEntity.ok(service.obtenerHabitacionPorIdSinEstado(id));
     }
 
-    /**
-     * Cambio de estado MANUAL (uso administrativo, vía Gateway).
-     * Aplica la restricción: no se puede volver a DISPONIBLE si está OCUPADA.
-     */
-    @PutMapping("/{id}/estado/{idEstado}")
+    @PatchMapping("/{id}/estado/{idEstado}")
     public ResponseEntity<Void> actualizarEstadoHabitacion(
             @PathVariable @Positive(message = "El id debe ser positivo") Long id,
             @PathVariable @Positive(message = "El idEstado debe ser positivo") Long idEstado) {
@@ -35,12 +31,7 @@ public class HabitacionController extends CommonController<HabitacionRequest, Ha
         return ResponseEntity.noContent().build();
     }
 
-    /**
-     * Cambio de estado interno, exclusivo para la comunicación Feign desde
-     * msv-reservas (creación, check-in, check-out y cancelación de reservas).
-     * No aplica la restricción de la transición manual.
-     */
-    @PatchMapping("/{id}/estado-sistema/{idEstado}")
+    @PutMapping("/{id}/estado-sistema/{idEstado}")
     public ResponseEntity<Void> actualizarEstadoHabitacionSistema(
             @PathVariable @Positive(message = "El id debe ser positivo") Long id,
             @PathVariable @Positive(message = "El idEstado debe ser positivo") Long idEstado) {
