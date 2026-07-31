@@ -1,9 +1,7 @@
 package com.proyecto.common.dto.huesped;
 
 public record DatosHuesped(
-
-        Long id,
-        String nombreCompleto
-
-) {
-}
+        String nombre,
+        String documento,
+        String telefono
+) {}
