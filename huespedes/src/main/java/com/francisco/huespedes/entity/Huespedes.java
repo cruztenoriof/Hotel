@@ -93,6 +93,7 @@
                 throw new IllegalArgumentException(
                         "El huesped está elimiado");
         }
+
         public void eliminar() {
             this.estadoRegistro = EstadoRegistro.ELIMINADO;
         }
